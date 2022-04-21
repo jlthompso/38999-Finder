@@ -5,6 +5,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import TitleBar from './components/TitleBar.js'
+import ConnectorTable from './components/ConnectorTable.js';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
             </FormGroup>
           </Grid>
           <Grid item xs={9}>
-            Table
+            <ConnectorTable />
           </Grid>
           <Grid item xs={3}>
             Insert Arrangement
