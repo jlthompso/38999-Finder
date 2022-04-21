@@ -4,15 +4,15 @@ import Grid from '@mui/material/Grid';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import TitleBar from './components/TitleBar.js'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            MIL-DTL-38999 Series III Connector Inventory Search
-          </Grid>
+        <TitleBar />
+      </header>
+      <Grid container spacing={2}>
           <Grid item xs={3}>
             <FormGroup>
               <FormControlLabel control={<Switch defaultChecked />} label="Military" />
@@ -26,7 +26,6 @@ function App() {
             Insert Arrangement
           </Grid>
         </Grid>
-      </header>
     </div>
   );
 }
