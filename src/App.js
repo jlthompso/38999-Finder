@@ -1,11 +1,9 @@
 import React from 'react';
 import './App.css';
 import Grid from '@mui/material/Grid';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import TitleBar from './components/TitleBar.js'
-import ConnectorTable from './components/ConnectorTable.js';
+import TitleBar from './components/TitleBar'
+import ConnectorTable from './components/ConnectorTable';
+import SearchForm from './components/SearchForm';
 
 function App() {
   return (
@@ -15,10 +13,7 @@ function App() {
       </header>
       <Grid container spacing={2}>
           <Grid item xs={3}>
-            <FormGroup>
-              <FormControlLabel control={<Switch defaultChecked />} label="Military" />
-              <FormControlLabel control={<Switch defaultChecked />} label="Commercial" />
-            </FormGroup>
+            <SearchForm />
           </Grid>
           <Grid item xs={9}>
             <ConnectorTable />
