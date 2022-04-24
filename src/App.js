@@ -6,6 +6,7 @@ import SearchForm from './components/SearchForm';
 import MilPartNum from './components/MilPartNum';
 import Stack from '@mui/material/Stack';
 import CommercialPartNum from './components/CommercialPartNum';
+import FooterBar from './components/FooterBar';
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
           <ConnectorTable />
         </Stack>
       </Stack>
+      <footer>
+        <FooterBar />
+      </footer>
     </div>
   );
 }
