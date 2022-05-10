@@ -8,13 +8,34 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setMilitaryType,
+  setCommercialType,
+  setShellStyle,
+  setShellSize,
+  setInsertArrangement,
+  setKeyArrangement,
+  setShellFinish,
+  setGender
+} from './connectorSlice';
 
 export default function SearchForm() {
+  const dispatch = useDispatch();
+
   return (
     <>
       <FormGroup sx={{ m: 1}}>
-          <FormControlLabel control={<Switch defaultChecked />} label="Military" />
-          <FormControlLabel control={<Switch defaultChecked />} label="Commercial" />
+          <FormControlLabel control={<Switch
+            id='military-switch'
+            defaultChecked
+            onChange={(e) => dispatch(setMilitaryType(e.target.checked))}
+          />} label="Military" />
+          <FormControlLabel control={<Switch
+            id='commercial-switch'
+            defaultChecked
+            onChange={(e) => dispatch(setCommercialType(e.target.checked))}
+          />} label="Commercial" />
       </FormGroup>
 
       <FormControl required fullWidth sx={{ m: 1}}>
@@ -24,6 +45,7 @@ export default function SearchForm() {
           id="style-select"
           value={"straight-plug"}
           label="Shell Style"
+          onChange={(e) => dispatch(setShellStyle(e.target.value))}
         >
           <MenuItem value={"straight-plug"}>Straight Plug</MenuItem>
           <MenuItem value={"jam-nut-receptacle"}>Jam Nut Receptacle</MenuItem>
@@ -38,6 +60,7 @@ export default function SearchForm() {
           id="size-select"
           value={9}
           label="Shell Size"
+          onChange={(e) => dispatch(setShellSize(e.target.value))}
         >
           <MenuItem value={9}>A (9)</MenuItem>
           <MenuItem value={11}>B (11)</MenuItem>
@@ -55,6 +78,7 @@ export default function SearchForm() {
           id="insert-select"
           value={"15-4"}
           label="Insert Arrangement"
+          onChange={(e) => dispatch(setInsertArrangement(e.target.value))}
         >
           <MenuItem value={"15-4"}>15-4</MenuItem>
           <MenuItem value={"15-5"}>15-5</MenuItem>
@@ -70,15 +94,16 @@ export default function SearchForm() {
         <Select
           labelId="key-select-label"
           id="key-select"
-          value={"N"}
+          value={"n"}
           label="Key Arrangement"
+          onChange={(e) => dispatch(setKeyArrangement(e.target.value))}
         >
-          <MenuItem value={"N"}>N</MenuItem>
-          <MenuItem value={"A"}>A</MenuItem>
-          <MenuItem value={"B"}>B</MenuItem>
-          <MenuItem value={"C"}>C</MenuItem>
-          <MenuItem value={"D"}>D</MenuItem>
-          <MenuItem value={"E"}>E</MenuItem>
+          <MenuItem value={"n"}>N</MenuItem>
+          <MenuItem value={"a"}>A</MenuItem>
+          <MenuItem value={"b"}>B</MenuItem>
+          <MenuItem value={"c"}>C</MenuItem>
+          <MenuItem value={"d"}>D</MenuItem>
+          <MenuItem value={"e"}>E</MenuItem>
         </Select>
       </FormControl>
 
@@ -87,14 +112,15 @@ export default function SearchForm() {
         <Select
           labelId="finish-select-label"
           id="finish-select"
-          value={"Any"}
+          value={"any"}
           label="Shell Finish"
+          onChange={(e) => dispatch(setShellFinish(e.target.value))}
         >
-          <MenuItem value={"Any"}>Any</MenuItem>
-          <MenuItem value={"Electroless Nickel"}>Electroless Nickel</MenuItem>
-          <MenuItem value={"Olive Drab Cadmium"}>Olive Drab Cadmium</MenuItem>
-          <MenuItem value={"Durmalon"}>Durmalon</MenuItem>
-          <MenuItem value={"Zinc-Nickel"}>Zinc-Nickel</MenuItem>
+          <MenuItem value={"any"}>Any</MenuItem>
+          <MenuItem value={"electroless-nickel"}>Electroless Nickel</MenuItem>
+          <MenuItem value={"olive-drab-cadmium"}>Olive Drab Cadmium</MenuItem>
+          <MenuItem value={"durmalon"}>Durmalon</MenuItem>
+          <MenuItem value={"zinc-nickel"}>Zinc-Nickel</MenuItem>
         </Select>
       </FormControl>
 
@@ -102,6 +128,7 @@ export default function SearchForm() {
         <RadioGroup
           defaultValue="p"
           name="gender-radio-buttons-group"
+          onChange={(e) => dispatch(setGender(e.target.value))}
         >
           <FormControlLabel value="p" control={<Radio />} label="Pins" />
           <FormControlLabel value="s" control={<Radio />} label="Sockets" />
