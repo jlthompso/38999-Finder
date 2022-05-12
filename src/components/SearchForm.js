@@ -40,6 +40,21 @@ export default function SearchForm() {
   const keyArrangement = useSelector(selectKeyArrangement);
   const shellFinish = useSelector(selectShellFinish);
 
+  const insertArrangements = {
+    '9': [35, 98],
+    '11': [2, 4, 5, 35, 98, 99],
+    '13': [4, 8, 35, 98],
+    '15': [5, 15, 18, 19, 35, 97],
+    '17': [2, 3, 6, 8, 26, 35, 99],
+    '19': [11, 18, 19, 28, 32, 35],
+    '21': [11, 16, 29, 35, 39, 41, 75, 76],
+    '23': [21, 35, 53, 55],
+    '25': [4, 7, 8, 9, 10, 11, 19, 20, 21]
+  }
+
+  const insertMenuItems = insertArrangements[String(shellSize)].map((insert) =>
+    <MenuItem value={Number(insert)} key={`menu-item-${shellSize}-${insert}`}>{`${shellSize}-${insert}`}</MenuItem>)
+
   return (
     <>
       <FormGroup sx={{ m: 1}}>
@@ -87,7 +102,10 @@ export default function SearchForm() {
           id="size-select"
           value={shellSize}
           label="Shell Size"
-          onChange={(e) => dispatch(setShellSize(e.target.value))}
+          onChange={(e) => {
+            dispatch(setShellSize(e.target.value));
+            dispatch(setInsertArrangement(insertArrangements[String(e.target.value)][0]));
+          }}
         >
           <MenuItem value={9}>A (9)</MenuItem>
           <MenuItem value={11}>B (11)</MenuItem>
@@ -110,8 +128,7 @@ export default function SearchForm() {
           label="Insert Arrangement"
           onChange={(e) => dispatch(setInsertArrangement(e.target.value))}
         >
-          <MenuItem value={35}>9-35</MenuItem>
-          <MenuItem value={98}>9-98</MenuItem>
+          {insertMenuItems}
         </Select>
       </FormControl>
 
