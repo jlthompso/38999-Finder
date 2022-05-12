@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setMilitaryType,
   setCommercialType,
@@ -19,22 +19,34 @@ import {
   setShellFinish,
   setGender
 } from './connectorSlice';
+import { selectMilitaryType, selectCommercialType } from './connectorSlice';
 
 export default function SearchForm() {
   const dispatch = useDispatch();
+
+  const militaryType = useSelector(selectMilitaryType);
+  const commercialType = useSelector(selectCommercialType);
 
   return (
     <>
       <FormGroup sx={{ m: 1}}>
           <FormControlLabel control={<Switch
             id='military-switch'
-            defaultChecked
-            onChange={(e) => dispatch(setMilitaryType(e.target.checked))}
+            checked={militaryType}
+            disabled={!commercialType}
+            onChange={(e) => {
+              if (!e.target.checked && !commercialType) e.target.checked = true;
+              dispatch(setMilitaryType(e.target.checked));
+            }}
           />} label="Military" />
           <FormControlLabel control={<Switch
             id='commercial-switch'
-            defaultChecked
-            onChange={(e) => dispatch(setCommercialType(e.target.checked))}
+            checked={commercialType}
+            disabled={!militaryType}
+            onChange={(e) => {
+              if (!e.target.checked && !militaryType) e.target.checked = true;
+              dispatch(setCommercialType(e.target.checked));
+            }}
           />} label="Commercial" />
       </FormGroup>
 
@@ -45,7 +57,9 @@ export default function SearchForm() {
           id="style-select"
           value={"straight-plug"}
           label="Shell Style"
-          onChange={(e) => dispatch(setShellStyle(e.target.value))}
+          onChange={(e) => {
+            dispatch(setShellStyle(e.target.value))
+          }}
         >
           <MenuItem value={"straight-plug"}>Straight Plug</MenuItem>
           <MenuItem value={"jam-nut-receptacle"}>Jam Nut Receptacle</MenuItem>
