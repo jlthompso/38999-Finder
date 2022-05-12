@@ -7,7 +7,7 @@ export const connectorSlice = createSlice({
     commercialType: true,
     shellStyle: 'straight-plug',
     shellSize: 9,
-    insertArrangement: '11-98',
+    insertArrangement: 35,
     keyArrangement: 'n',
     shellFinish: 'any',
     gender: 'p'
@@ -54,9 +54,9 @@ export const {
 export const selectMilitaryType = (state) => state.connector.militaryType;
 export const selectCommercialType = (state) => state.connector.commercialType;
 export const selectShellStyle = (state) => state.connector.shellStyle;
-export const selectShellSize = (state) => state.connector.setShellSize;
-export const selectInsertArrangement = (state) => state.connector.selectInsertArrangement;
-export const selectKeyArrangement = (state) => state.connector.selectKeyArrangement;
+export const selectShellSize = (state) => state.connector.shellSize;
+export const selectInsertArrangement = (state) => state.connector.insertArrangement;
+export const selectKeyArrangement = (state) => state.connector.keyArrangement;
 export const selectShellFinish = (state) => state.connector.shellFinish;
 export const selectGender = (state) => state.connector.gender;
 

@@ -19,13 +19,26 @@ import {
   setShellFinish,
   setGender
 } from './connectorSlice';
-import { selectMilitaryType, selectCommercialType } from './connectorSlice';
+import {
+  selectMilitaryType,
+  selectCommercialType,
+  selectShellStyle,
+  selectShellSize,
+  selectInsertArrangement,
+  selectKeyArrangement,
+  selectShellFinish
+} from './connectorSlice';
 
 export default function SearchForm() {
   const dispatch = useDispatch();
 
   const militaryType = useSelector(selectMilitaryType);
   const commercialType = useSelector(selectCommercialType);
+  const shellStyle = useSelector(selectShellStyle);
+  const shellSize = useSelector(selectShellSize);
+  const insertArrangement = useSelector(selectInsertArrangement);
+  const keyArrangement = useSelector(selectKeyArrangement);
+  const shellFinish = useSelector(selectShellFinish);
 
   return (
     <>
@@ -55,7 +68,7 @@ export default function SearchForm() {
         <Select
           labelId="style-select-label"
           id="style-select"
-          value={"straight-plug"}
+          value={shellStyle}
           label="Shell Style"
           onChange={(e) => {
             dispatch(setShellStyle(e.target.value))
@@ -72,7 +85,7 @@ export default function SearchForm() {
         <Select
           labelId="size-select-label"
           id="size-select"
-          value={9}
+          value={shellSize}
           label="Shell Size"
           onChange={(e) => dispatch(setShellSize(e.target.value))}
         >
@@ -81,7 +94,10 @@ export default function SearchForm() {
           <MenuItem value={13}>C (13)</MenuItem>
           <MenuItem value={15}>D (15)</MenuItem>
           <MenuItem value={17}>E (17)</MenuItem>
-          <MenuItem value={19}>F (18)</MenuItem>
+          <MenuItem value={19}>F (19)</MenuItem>
+          <MenuItem value={21}>G (21)</MenuItem>
+          <MenuItem value={23}>H (23)</MenuItem>
+          <MenuItem value={25}>J (25)</MenuItem>
         </Select>
       </FormControl>
 
@@ -90,16 +106,12 @@ export default function SearchForm() {
         <Select
           labelId="insert-select-label"
           id="insert-select"
-          value={"15-4"}
+          value={insertArrangement}
           label="Insert Arrangement"
           onChange={(e) => dispatch(setInsertArrangement(e.target.value))}
         >
-          <MenuItem value={"15-4"}>15-4</MenuItem>
-          <MenuItem value={"15-5"}>15-5</MenuItem>
-          <MenuItem value={"15-15"}>15-15</MenuItem>
-          <MenuItem value={"15-18"}>15-18</MenuItem>
-          <MenuItem value={"15-19"}>15-19</MenuItem>
-          <MenuItem value={"15-35"}>15-35</MenuItem>
+          <MenuItem value={35}>9-35</MenuItem>
+          <MenuItem value={98}>9-98</MenuItem>
         </Select>
       </FormControl>
 
@@ -108,7 +120,7 @@ export default function SearchForm() {
         <Select
           labelId="key-select-label"
           id="key-select"
-          value={"n"}
+          value={keyArrangement}
           label="Key Arrangement"
           onChange={(e) => dispatch(setKeyArrangement(e.target.value))}
         >
@@ -126,7 +138,7 @@ export default function SearchForm() {
         <Select
           labelId="finish-select-label"
           id="finish-select"
-          value={"any"}
+          value={shellFinish}
           label="Shell Finish"
           onChange={(e) => dispatch(setShellFinish(e.target.value))}
         >
