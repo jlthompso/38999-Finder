@@ -9,6 +9,7 @@ const headless = true;  // set false to view browser during search
 /* GET home page. */
 router.get('/:partNum', async function(req, res, next) {
   const partNum = req.params.partNum;
+  const results = [];
 
   if (!browser) {
     browser = await puppeteer.launch({headless: headless});
@@ -29,11 +30,27 @@ router.get('/:partNum', async function(req, res, next) {
   // scrape search results
   const numResultsSel = 'span[data-testid="product-count"]';
   const element = await page.waitForSelector(numResultsSel, {visible: true});
-  const value = await element.evaluate(el => el.textContent);
+  const numResults = await element.evaluate(el => el.textContent);
+
+  let rows = null;
+  if (numResults) {
+    const rowSel = 'tr[data-testid="data-table-0-row"]';
+    rows = await page.evaluate(() => {
+      const tds = Array.from(document.querySelectorAll('tr[data-testid="data-table-0-row"]'))
+      return tds.map(td => {
+        return td.querySelector('[data-atag="tr-qtyAvailable"] span div').innerHTML;
+      })
+    });
+
+
+    //rows = await page.$$eval(rowSel, (rows) =>
+    //  rows.map((row) => row.innerHTML)
+    //);
+  }
 
   await page.close();
 
-  res.send(value);
+  res.send(JSON.stringify(rows));
 });
 
 module.exports = router;
