@@ -9,7 +9,7 @@ const headless = true;  // set false to view browser during search
 /* GET home page. */
 router.get('/:partNum', async function(req, res, next) {
   const partNum = req.params.partNum;
-  const results = [];
+  let results = null;
 
   if (!browser) {
     browser = await puppeteer.launch({headless: headless});
@@ -32,25 +32,24 @@ router.get('/:partNum', async function(req, res, next) {
   const element = await page.waitForSelector(numResultsSel, {visible: true});
   const numResults = await element.evaluate(el => el.textContent);
 
-  let rows = null;
   if (numResults) {
-    const rowSel = 'tr[data-testid="data-table-0-row"]';
-    rows = await page.evaluate(() => {
+    results = await page.evaluate(() => {
       const tds = Array.from(document.querySelectorAll('tr[data-testid="data-table-0-row"]'))
       return tds.map(td => {
-        return td.querySelector('[data-atag="tr-qtyAvailable"] span div').innerHTML;
+        const qtyAvailable = Number(td.querySelector('[data-atag="tr-qtyAvailable"] div').innerHTML.split(/\s*(?:-|$)\s*/)[0]);
+        const unitPrice = Number(td.querySelector('[data-atag="tr-unitPrice"] div').innerHTML.slice(1));
+        const vendorPartNum = td.querySelector('[data-atag="tr-dkProducts"] div').innerHTML;
+        const mfgPartNum = td.querySelector('a[data-testid="data-table-0-product-number"]').innerHTML;
+        const partLink = td.querySelector('a[data-testid="data-table-0-product-number"]').href;
+
+        return qtyAvailable ? {qtyAvailable, unitPrice, vendorPartNum, mfgPartNum, partLink} : null;
       })
     });
-
-
-    //rows = await page.$$eval(rowSel, (rows) =>
-    //  rows.map((row) => row.innerHTML)
-    //);
   }
 
   await page.close();
 
-  res.send(JSON.stringify(rows));
+  res.send(JSON.stringify(results.filter(Boolean)));
 });
 
 module.exports = router;
