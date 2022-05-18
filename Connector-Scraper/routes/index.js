@@ -17,6 +17,7 @@ router.get('/:partNum', async function(req, res, next) {
   }
 
   const page = await context.newPage();
+  page.setDefaultNavigationTimeout(120000); 
 
   // digi-key part search
   await page.goto('https://www.digikey.com/en/products/filter/circular-connectors/436');
@@ -33,7 +34,7 @@ router.get('/:partNum', async function(req, res, next) {
   const numResults = await element.evaluate(el => el.textContent);
 
   if (numResults) {
-    results = await page.evaluate(() => {
+    results = await page.evaluate(partNum => {
       const tds = Array.from(document.querySelectorAll('tr[data-testid="data-table-0-row"]'))
       return tds.map(td => {
         const qtyAvailable = Number(td.querySelector('[data-atag="tr-qtyAvailable"] div').innerHTML.split(/\s*(?:-|$)\s*/)[0]);
@@ -42,9 +43,9 @@ router.get('/:partNum', async function(req, res, next) {
         const mfgPartNum = td.querySelector('a[data-testid="data-table-0-product-number"]').innerHTML;
         const partLink = td.querySelector('a[data-testid="data-table-0-product-number"]').href;
 
-        return qtyAvailable ? {qtyAvailable, unitPrice, vendorPartNum, mfgPartNum, partLink} : null;
+        return (qtyAvailable && partNum.toUpperCase() == mfgPartNum.toUpperCase()) ? {qtyAvailable, unitPrice, vendorPartNum, mfgPartNum, partLink} : null;
       })
-    });
+    }, partNum);
   }
 
   await page.close();
