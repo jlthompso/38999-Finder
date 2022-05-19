@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useSelector } from 'react-redux';
 import {
@@ -31,6 +31,45 @@ export default function ConnectorTable() {
   const shellFinish = useSelector(selectShellFinish);
   const gender = useSelector(selectGender);
 
+  const [rows, setRows] = useState([{id: 0}]);
+  let controller = new AbortController();
+  let searching = false;
+  useEffect(() => {
+    //if (searching) controller.abort();
+    setRows([{id: 0}]);
+    //while(searching);
+    scrapeDigikey();
+  }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender]);
+
+  const scrapeDigikey = async () => {
+    if (searching) {
+      controller.abort();
+      while (searching);
+    }
+    searching = true;
+    const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
+    for (const partNum of partNums) {
+      if (controller.signal.aborted) {
+        setRows([{id: 0}]);
+        break;
+      }
+      const searchUrl = `http://localhost:3000/${partNum.replace('/', '%2F')}`;
+      const response = await fetch(searchUrl, {signal: controller.signal});
+      if (controller.signal.aborted) {
+        setRows([{id: 0}]);
+        break;
+      }
+      if (response.body) {
+        const jsonData = await response.json();
+        jsonData.forEach(row => {
+          setRows((rows) => [...rows, row]);
+        });
+      }
+    }
+    controller = new AbortController();
+    searching = false;
+  };
+
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
@@ -39,7 +78,7 @@ export default function ConnectorTable() {
             sortModel: [{ field: 'qty', sort: 'desc' }],
           },
         }}
-        rows={getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender})}
+        rows={rows}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}

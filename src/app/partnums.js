@@ -134,7 +134,6 @@ export function getPartNums(opts) {
   const {militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender} = opts;
 
   const partNums = [];
-  const rows = [];
   let finishes = [];
 
   if (shellFinish === 'any') {
@@ -159,9 +158,5 @@ export function getPartNums(opts) {
     });
   }
 
-  partNums.forEach(function (partNum, i) {
-    rows.push({id: i, partNum: partNum, mfgr: 'placeholder', qty: 0, price: 0.00, vendor: 'placeholder'});
-  });
-
-  return rows;
+  return partNums;
 }
