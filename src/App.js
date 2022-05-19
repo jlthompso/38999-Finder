@@ -7,6 +7,8 @@ import MilPartNum from './components/MilPartNum';
 import Stack from '@mui/material/Stack';
 import CommercialPartNum from './components/CommercialPartNum';
 import FooterBar from './components/FooterBar';
+import InsertImg from './components/InsertImg';
+import Container from '@mui/material/Container';
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
       <Stack spacing={2} direction="row">
         <Stack spacing={2} sx={{ width: '20%' }}>
           <SearchForm />
-          Insert Arrangement
+          <Container style={{ textAlign: "center" }}>
+            <InsertImg />
+          </Container>
         </Stack>
         <Stack spacing={2} sx={{ width: '60%' }}>
           <MilPartNum />

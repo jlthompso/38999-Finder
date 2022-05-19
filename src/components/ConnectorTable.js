@@ -35,10 +35,8 @@ export default function ConnectorTable() {
   let controller = new AbortController();
   let searching = false;
   useEffect(() => {
-    //if (searching) controller.abort();
     setRows([{id: 0}]);
-    //while(searching);
-    scrapeDigikey();
+    //scrapeDigikey();
   }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender]);
 
   const scrapeDigikey = async () => {
