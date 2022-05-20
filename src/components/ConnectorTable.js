@@ -12,6 +12,7 @@ import {
   selectGender
 } from './connectorSlice';
 import { getPartNums } from '../app/partnums';
+import * as dk from '../app/digikey';
 
 const columns = [
   { field: 'partNum', headerName: 'Part Number', width: 200 },
@@ -36,9 +37,24 @@ export default function ConnectorTable() {
   let searching = false;
   useEffect(() => {
     setRows([{id: 0}]);
-    scrapePEI();
+    //scrapePEI();
     //scrapeDigikey();
   }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender]);
+
+  const [authCode, setAuthCode] = useState();
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('code')) {
+      setAuthCode(params.get('code'));
+    } else {
+      dk.getAuthCode();
+    }
+  }, []);
+
+  let accessToken;
+  useEffect(() => {
+    if (authCode) accessToken = dk.getAccessToken(authCode).access_token;
+  }, [authCode]);
 
   const scrapePEI = async () => {
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});

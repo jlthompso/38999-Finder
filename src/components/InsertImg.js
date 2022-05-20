@@ -11,7 +11,7 @@ export default function InsertImg() {
   const insertArrangement = useSelector(selectInsertArrangement);
 
   useEffect(() => {
-    fetchConnImg();
+    //fetchConnImg();
   }, [insertArrangement]);
 
   const fetchConnImg = async () => {
