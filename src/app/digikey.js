@@ -1,4 +1,4 @@
-export async function getAuthCode() {
+export function getAuthCode() {
   const authEndpoint = process.env.REACT_APP_DK_AUTH_ENDPOINT;
   const response_type = 'code';
   const client_id = process.env.REACT_APP_DK_CLIENT_ID;
@@ -24,5 +24,69 @@ export async function getAccessToken(code) {
     body: body
   });
 
-  return response.json();
+  const json = await response.json();
+
+  return json;
+}
+
+export async function search(token, partNum) {
+  const results = [];
+
+  const url = process.env.REACT_APP_DK_SEARCH;
+  const client_id = process.env.REACT_APP_DK_CLIENT_ID;
+  const body = {
+    "Keywords": partNum,
+    "RecordCount": 10,
+    "RecordStartPosition": 0,
+    "Filters": {
+      "TaxonomyIds": [
+        0
+      ],
+      "ManufacturerIds": [
+        0
+      ],
+      "ParametricFilters": [
+        {
+          "ParameterId": 1989,
+          "ValueId": "0"
+        }
+      ]
+    },
+    "Sort": {
+      "SortOption": "SortByDigiKeyPartNumber",
+      "Direction": "Ascending",
+      "SortParameterId": 0
+    },
+    "RequestedQuantity": 0,
+    "SearchOptions": [
+      "ManufacturerPartSearch"
+    ],
+    "ExcludeMarketPlaceProducts": true
+  }
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'X-DIGIKEY-Client-Id': client_id
+    },
+    body: JSON.stringify(body)
+  });
+
+  const json = await response.json();
+  console.log(json);
+  json.Products.forEach(product => {
+    const vendor = "Digi-Key";
+    const qty = product.QuantityAvailable;
+    const price = product.UnitPrice;
+    const id = product.DigiKeyPartNumber;
+    const mfgPartNum = product.ManufacturerPartNumber;
+    const link = `https://www.digikey.com${product.ProductUrl}`;
+    const mfgr = product.Manufacturer.Value;
+
+    results.push({vendor, qty, price, id, partNum: mfgPartNum, link, mfgr});
+  });
+
+  return results;
 }

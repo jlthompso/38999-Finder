@@ -37,6 +37,7 @@ export default function ConnectorTable() {
   let searching = false;
   useEffect(() => {
     setRows([{id: 0}]);
+    if (accessToken) searchDigikey();
     //scrapePEI();
     //scrapeDigikey();
   }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender]);
@@ -51,10 +52,25 @@ export default function ConnectorTable() {
     }
   }, []);
 
-  let accessToken;
+  const [accessToken, setAccessToken] = useState();
   useEffect(() => {
-    if (authCode) accessToken = dk.getAccessToken(authCode).access_token;
+    const getToken = async (code) => {
+      const response = await dk.getAccessToken(code);
+      setAccessToken(response.access_token);
+    };
+
+    if (authCode) getToken(authCode);
   }, [authCode]);
+
+  const searchDigikey = async () => {
+    const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
+    for (const partNum of partNums) {
+      const response = await dk.search(accessToken, partNum);
+      response.forEach(row => {
+        setRows((rows) => [...rows, row]);
+      });
+    }
+  };
 
   const scrapePEI = async () => {
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
