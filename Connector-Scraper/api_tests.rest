@@ -1,4 +1,7 @@
-GET http://localhost:3000/d38999%2F26fa98pn HTTP/1.1
+GET http://localhost:3000/digikey/d38999%2F26fa98pn HTTP/1.1
 
 ###
-GET http://localhost:3000/D38999%2F26WA35PN-LC HTTP/1.1
+GET http://localhost:3000/digikey/D38999%2F26WA35PN-LC HTTP/1.1
+
+###
+GET http://localhost:3000/peigenesis/d38999%2F26fa98pn HTTP/1.1

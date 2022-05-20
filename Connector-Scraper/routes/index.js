@@ -4,10 +4,53 @@ const puppeteer = require('puppeteer');
 
 let browser = null;
 let context = null;
-const headless = true;  // set false to view browser during search
+const headless = false;  // set false to view browser during search
 
-/* GET home page. */
-router.get('/:partNum', async function(req, res, next) {
+/* Search PEI-Genesis for parts. */
+router.get('/peigenesis/:partNum', async function(req, res, next) {
+  const partNum = req.params.partNum;
+  let results = null;
+
+  if (!browser) {
+    browser = await puppeteer.launch({headless: headless});
+    context = await browser.createIncognitoBrowserContext();
+  }
+
+  const page = await context.newPage();
+
+  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36');
+  await page.goto(`https://www.peigenesis.com/en/shop/f/${partNum.replace('/', '')}.html`, {waitUntil: 'load', timeout: 120000});
+
+
+  const numResults = await page.evaluate(() => {  
+    const numResultsSel = '#pagination_header';
+    return document.querySelector(numResultsSel) ? Number(document.querySelector(numResultsSel).innerHTML.split('(')[1].split(' ')[0]) : null;
+  });
+
+  if (numResults) {
+    results = await page.evaluate(partNum => {
+      const divs = Array.from(document.querySelectorAll('.shop-listing-wrapper'))
+      return divs.map(div => {
+        const vendor = "PEI-Genesis";
+        const qty = Number(div.querySelector('.fieldvalue_available').innerHTML);
+        const price = Number(div.querySelector('div.price').textContent.split('$')[1]);
+        const id = div.querySelector('.part-number p a').id.split('-')[1];
+        const mfgPartNum = div.querySelector('.part-number p a').innerHTML;
+        const link = div.querySelector('.part-number p a').href;
+        const mfgr = div.querySelector('.part-number p').innerHTML.split('<br>')[1];
+
+        return (qty && partNum.toUpperCase() == mfgPartNum.toUpperCase()) ? {qty, price, id, partNum: mfgPartNum, link, vendor, mfgr} : null;
+      })
+    }, partNum);
+  }
+
+  await page.close();
+
+  res.send(results ? JSON.stringify(results.filter(Boolean)) : "[]");
+});
+
+/* Search Digi-Key for parts. */
+router.get('/digikey/:partNum', async function(req, res, next) {
   let cancelRequest = false;
   req.on('abort', function (err) {
     cancelRequest = true;

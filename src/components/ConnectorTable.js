@@ -36,8 +36,23 @@ export default function ConnectorTable() {
   let searching = false;
   useEffect(() => {
     setRows([{id: 0}]);
+    scrapePEI();
     //scrapeDigikey();
   }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender]);
+
+  const scrapePEI = async () => {
+    const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
+    for (const partNum of partNums) {
+      const searchUrl = `http://localhost:3000/peigenesis/${partNum.replace('/', '%2F')}`;
+      const response = await fetch(searchUrl);
+      if (response.body) {
+        const jsonData = await response.json();
+        jsonData.forEach(row => {
+          setRows((rows) => [...rows, row]);
+        });
+      }
+    }
+  };
 
   const scrapeDigikey = async () => {
     if (searching) {
@@ -51,7 +66,7 @@ export default function ConnectorTable() {
         setRows([{id: 0}]);
         break;
       }
-      const searchUrl = `http://localhost:3000/${partNum.replace('/', '%2F')}`;
+      const searchUrl = `http://localhost:3000/digikey/${partNum.replace('/', '%2F')}`;
       const response = await fetch(searchUrl, {signal: controller.signal});
       if (controller.signal.aborted) {
         setRows([{id: 0}]);
