@@ -67,10 +67,9 @@ export default function ConnectorTable() {
   }, [authCode]);
 
   const searchDigikey = async () => {
-    if (searching) {
+    while (searching) {
       setAbortSearch(true);
-      setTimeout(searchDigikey, 300);
-      return;
+      await new Promise(resolve => setTimeout(resolve, 300));
     }
     setAbortSearch(false);
 
