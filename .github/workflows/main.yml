@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: |
           npm install
-          npm run-script build
+          CI='' npm run-script build
         env:
           REACT_APP_DK_CLIENT_ID: ${{ secrets.REACT_APP_DK_CLIENT_ID }}
           REACT_APP_DK_CLIENT_SECRET: ${{ secrets.REACT_APP_DK_CLIENT_SECRET }}
