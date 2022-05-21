@@ -36,32 +36,24 @@ export async function search(token, partNum) {
   const client_id = process.env.REACT_APP_DK_CLIENT_ID;
   const body = {
     "Keywords": partNum,
-    "RecordCount": 10,
+    "RecordCount": 50,
     "RecordStartPosition": 0,
     "Filters": {
-      "TaxonomyIds": [
-        0
-      ],
-      "ManufacturerIds": [
-        0
-      ],
-      "ParametricFilters": [
-        {
-          "ParameterId": 1989,
-          "ValueId": "0"
-        }
-      ]
+      "TaxonomyIds": [],
+      "ManufacturerIds": [],
+      "ParametricFilters": []
     },
     "Sort": {
-      "SortOption": "SortByDigiKeyPartNumber",
-      "Direction": "Ascending",
+      "SortOption": "SortByQuantityAvailable",
+      "Direction": "Descending",
       "SortParameterId": 0
     },
-    "RequestedQuantity": 0,
+    "RequestedQuantity": 1,
     "SearchOptions": [
-      "ManufacturerPartSearch"
+      "ManufacturerPartSearch",
+      "InStock"
     ],
-    "ExcludeMarketPlaceProducts": true
+    "ExcludeMarketPlaceProducts": false
   }
 
   const response = await fetch(url, {
@@ -75,17 +67,16 @@ export async function search(token, partNum) {
   });
 
   const json = await response.json();
-  console.log(json);
   json.Products.forEach(product => {
     const vendor = "Digi-Key";
     const qty = product.QuantityAvailable;
     const price = product.UnitPrice;
     const id = product.DigiKeyPartNumber;
     const mfgPartNum = product.ManufacturerPartNumber;
-    const link = `https://www.digikey.com${product.ProductUrl}`;
+    const link = product.ProductUrl;
     const mfgr = product.Manufacturer.Value;
 
-    results.push({vendor, qty, price, id, partNum: mfgPartNum, link, mfgr});
+    if (mfgPartNum === partNum) results.push({vendor, qty, price, id, partNum: mfgPartNum, link, mfgr});
   });
 
   return results;

@@ -19,7 +19,12 @@ const columns = [
   { field: 'mfgr', headerName: 'Manufacturer', width: 200 },
   { field: 'qty', headerName: 'Quantity Available', width: 180 },
   { field: 'price', headerName: 'Price (USD)', width: 100 },
-  { field: 'vendor', headerName: 'Distributor', width: 200 },
+  { 
+    field: 'vendor',
+    headerName: 'Distributor',
+    width: 200,
+    renderCell: (params) => (<a href={params.row.link} target='_blank'>{params.row.vendor}</a>)
+  },
 ];
 
 export default function ConnectorTable() {
@@ -33,16 +38,14 @@ export default function ConnectorTable() {
   const gender = useSelector(selectGender);
 
   const [rows, setRows] = useState([{id: 0}]);
-  let controller = new AbortController();
-  let searching = false;
+  const [accessToken, setAccessToken] = useState();
+  const [authCode, setAuthCode] = useState();
+
   useEffect(() => {
     setRows([{id: 0}]);
     if (accessToken) searchDigikey();
-    //scrapePEI();
-    //scrapeDigikey();
-  }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender]);
+  }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender, accessToken]);
 
-  const [authCode, setAuthCode] = useState();
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.has('code')) {
@@ -52,7 +55,6 @@ export default function ConnectorTable() {
     }
   }, []);
 
-  const [accessToken, setAccessToken] = useState();
   useEffect(() => {
     const getToken = async (code) => {
       const response = await dk.getAccessToken(code);
@@ -70,49 +72,6 @@ export default function ConnectorTable() {
         setRows((rows) => [...rows, row]);
       });
     }
-  };
-
-  const scrapePEI = async () => {
-    const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
-    for (const partNum of partNums) {
-      const searchUrl = `http://localhost:3000/peigenesis/${partNum.replace('/', '%2F')}`;
-      const response = await fetch(searchUrl);
-      if (response.body) {
-        const jsonData = await response.json();
-        jsonData.forEach(row => {
-          setRows((rows) => [...rows, row]);
-        });
-      }
-    }
-  };
-
-  const scrapeDigikey = async () => {
-    if (searching) {
-      controller.abort();
-      while (searching);
-    }
-    searching = true;
-    const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
-    for (const partNum of partNums) {
-      if (controller.signal.aborted) {
-        setRows([{id: 0}]);
-        break;
-      }
-      const searchUrl = `http://localhost:3000/digikey/${partNum.replace('/', '%2F')}`;
-      const response = await fetch(searchUrl, {signal: controller.signal});
-      if (controller.signal.aborted) {
-        setRows([{id: 0}]);
-        break;
-      }
-      if (response.body) {
-        const jsonData = await response.json();
-        jsonData.forEach(row => {
-          setRows((rows) => [...rows, row]);
-        });
-      }
-    }
-    controller = new AbortController();
-    searching = false;
   };
 
   return (
