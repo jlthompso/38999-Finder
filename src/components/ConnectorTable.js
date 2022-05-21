@@ -40,6 +40,8 @@ export default function ConnectorTable() {
   const [rows, setRows] = useState([]);
   const [accessToken, setAccessToken] = useState();
   const [authCode, setAuthCode] = useState();
+  const [searching, setSearching] = useState(false);
+  const [abortSearch, setAbortSearch] = useState(false);
 
   useEffect(() => {
     setRows([]);
@@ -65,13 +67,21 @@ export default function ConnectorTable() {
   }, [authCode]);
 
   const searchDigikey = async () => {
+    if (searching) {
+      setAbortSearch(true);
+      while (searching);
+      setAbortSearch(false);
+    }
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
+    setSearching(true);
     for (const partNum of partNums) {
+      if (abortSearch) break;
       const response = await dk.search(accessToken, partNum);
       response.forEach(row => {
         setRows((rows) => [...rows, row]);
       });
     }
+    setSearching(false);
   };
 
   return (
