@@ -69,9 +69,11 @@ export default function ConnectorTable() {
   const searchDigikey = async () => {
     if (searching) {
       setAbortSearch(true);
-      while (searching);
-      setAbortSearch(false);
+      setTimeout(searchDigikey, 300);
+      return;
     }
+    setAbortSearch(false);
+
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
     setSearching(true);
     for (const partNum of partNums) {
