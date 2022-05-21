@@ -76,7 +76,7 @@ export async function search(token, partNum) {
     const link = product.ProductUrl;
     const mfgr = product.Manufacturer.Value;
 
-    if (mfgPartNum === partNum) results.push({vendor, qty, price, id, partNum: mfgPartNum, link, mfgr});
+    if (mfgPartNum === partNum && qty > 0) results.push({vendor, qty, price, id, partNum: mfgPartNum, link, mfgr});
   });
 
   return results;

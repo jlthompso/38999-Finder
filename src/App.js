@@ -29,9 +29,6 @@ function App() {
           <ConnectorTable />
         </Stack>
       </Stack>
-      <footer>
-        <FooterBar />
-      </footer>
     </div>
   );
 }

@@ -37,12 +37,12 @@ export default function ConnectorTable() {
   const shellFinish = useSelector(selectShellFinish);
   const gender = useSelector(selectGender);
 
-  const [rows, setRows] = useState([{id: 0}]);
+  const [rows, setRows] = useState([]);
   const [accessToken, setAccessToken] = useState();
   const [authCode, setAuthCode] = useState();
 
   useEffect(() => {
-    setRows([{id: 0}]);
+    setRows([]);
     if (accessToken) searchDigikey();
   }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender, accessToken]);
 
