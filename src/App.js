@@ -6,7 +6,6 @@ import SearchForm from './components/SearchForm';
 import MilPartNum from './components/MilPartNum';
 import Stack from '@mui/material/Stack';
 import CommercialPartNum from './components/CommercialPartNum';
-import FooterBar from './components/FooterBar';
 import InsertImg from './components/InsertImg';
 import Container from '@mui/material/Container';
 
