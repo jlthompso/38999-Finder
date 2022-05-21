@@ -1,5 +1,5 @@
 export function getAuthCode() {
-  const authEndpoint = process.env.REACT_APP_DK_AUTH_ENDPOINT;
+  const authEndpoint = 'https://api.digikey.com/v1/oauth2/authorize';
   const response_type = 'code';
   const client_id = process.env.REACT_APP_DK_CLIENT_ID;
   const redirect_uri = process.env.REACT_APP_OAUTH_REDIRECT;
@@ -8,7 +8,7 @@ export function getAuthCode() {
 }
 
 export async function getAccessToken(code) {
-  const tokenEndpoint = process.env.REACT_APP_DK_TOKEN_ENDPOINT;
+  const tokenEndpoint = 'https://api.digikey.com/v1/oauth2/token';
   const client_id = process.env.REACT_APP_DK_CLIENT_ID;
   const client_secret = process.env.REACT_APP_DK_CLIENT_SECRET;
   const redirect_uri = process.env.REACT_APP_OAUTH_REDIRECT;
@@ -32,7 +32,7 @@ export async function getAccessToken(code) {
 export async function search(token, partNum) {
   const results = [];
 
-  const url = process.env.REACT_APP_DK_SEARCH;
+  const url = 'https://api.digikey.com/Search/v3/Products/Keyword';
   const client_id = process.env.REACT_APP_DK_CLIENT_ID;
   const body = {
     "Keywords": partNum,
