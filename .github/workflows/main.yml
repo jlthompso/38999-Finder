@@ -37,7 +37,7 @@ jobs:
           REACT_APP_OAUTH_REDIRECT: ${{ secrets.REACT_APP_OAUTH_REDIRECT }}
           
       - name: Deploy
-        uses: jlthompso/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
