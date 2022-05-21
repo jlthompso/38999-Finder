@@ -69,14 +69,17 @@ export default function ConnectorTable() {
   const searchDigikey = async () => {
     while (searching) {
       setAbortSearch(true);
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     setAbortSearch(false);
 
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
     setSearching(true);
     for (const partNum of partNums) {
-      if (abortSearch) break;
+      if (abortSearch) {
+        setRows([]);
+        break;
+      };
       const response = await dk.search(accessToken, partNum);
       response.forEach(row => {
         setRows((rows) => [...rows, row]);
