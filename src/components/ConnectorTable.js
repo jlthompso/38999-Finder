@@ -67,7 +67,7 @@ export default function ConnectorTable() {
   }, [authCode]);
 
   useEffect(() => {
-    if (accessToken) window.location.replace(process.env.REACT_APP_OAUTH_REDIRECT);
+    //if (accessToken) window.location.replace(process.env.REACT_APP_OAUTH_REDIRECT);
   }, [accessToken]);
 
   const searchDigikey = async () => {
