@@ -13,7 +13,6 @@ import {
 } from './connectorSlice';
 import { getPartNums } from '../app/partnums';
 import * as dk from '../app/digikey';
-import { useNavigate } from 'react-router-dom';
 
 const columns = [
   { field: 'partNum', headerName: 'Part Number', width: 200 },
@@ -29,8 +28,6 @@ const columns = [
 ];
 
 export default function ConnectorTable() {
-  const navigate = useNavigate();
-
   const militaryType = useSelector(selectMilitaryType);
   const commercialType = useSelector(selectCommercialType);
   const shellStyle = useSelector(selectShellStyle);
@@ -70,7 +67,7 @@ export default function ConnectorTable() {
   }, [authCode]);
 
   useEffect(() => {
-    if (accessToken) navigate("/");
+    if (accessToken) window.location.replace(process.env.REACT_APP_OAUTH_REDIRECT);
   }, [accessToken]);
 
   const searchDigikey = async () => {
@@ -83,11 +80,11 @@ export default function ConnectorTable() {
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
     setSearching(true);
     for (const partNum of partNums) {
+      const response = await dk.search(accessToken, partNum);
       if (abortSearch) {
         setRows([]);
         break;
       };
-      const response = await dk.search(accessToken, partNum);
       response.forEach(row => {
         setRows((rows) => [...rows, row]);
       });
