@@ -27,6 +27,9 @@ const columns = [
   },
 ];
 
+let searching = false;
+let abortSearch = false;
+
 export default function ConnectorTable() {
   const militaryType = useSelector(selectMilitaryType);
   const commercialType = useSelector(selectCommercialType);
@@ -40,8 +43,6 @@ export default function ConnectorTable() {
   const [rows, setRows] = useState([]);
   const [accessToken, setAccessToken] = useState();
   const [authCode, setAuthCode] = useState();
-  const [searching, setSearching] = useState(false);
-  const [abortSearch, setAbortSearch] = useState(false);
 
   useEffect(() => {
     setRows([]);
@@ -66,30 +67,28 @@ export default function ConnectorTable() {
     if (authCode) getToken(authCode);
   }, [authCode]);
 
-  useEffect(() => {
-    //if (accessToken) window.location.replace(process.env.REACT_APP_OAUTH_REDIRECT);
-  }, [accessToken]);
-
   const searchDigikey = async () => {
     while (searching) {
-      setAbortSearch(true);
-      await new Promise(resolve => setTimeout(resolve, 300));
+      abortSearch = true;
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
-    setAbortSearch(false);
+    searching = true;
 
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
-    setSearching(true);
     for (const partNum of partNums) {
       const response = await dk.search(accessToken, partNum);
+
       if (abortSearch) {
         setRows([]);
+        abortSearch = false;
         break;
-      };
+      }
+
       response.forEach(row => {
         setRows((rows) => [...rows, row]);
       });
     }
-    setSearching(false);
+    searching = false;
   };
 
   return (
