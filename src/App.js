@@ -22,7 +22,7 @@ function App() {
             <InsertImg />
           </Container>
         </Stack>
-        <Stack spacing={2} sx={{ width: '60%' }}>
+        <Stack spacing={2} sx={{ width: '60%' }} alignItems='center'>
           <MilPartNum />
           <CommercialPartNum />
           <ConnectorTable />
