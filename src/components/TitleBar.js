@@ -47,6 +47,9 @@ export default function TitleBar() {
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 This website was created by <a href='https://github.com/jlthompso' target='_blank'>Joe Thompson</a>.
                 The source code is available on <a href='https://github.com/jlthompso/38999-Finder' target='_blank'>Github</a>.
+                <br />
+                <br />
+                <a href="mailto:38999finder@gmail.com">Contact Me</a>
               </Typography>
             </Box>
           </Modal>
