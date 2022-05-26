@@ -128,7 +128,7 @@ const formatShellSize = (input) => {
 };
 
   return (
-    <Box mt={2} hidden={!visible}>
+    <Box hidden={!visible} minHeight={50} display='flex' alignItems='center'>
       <Tooltip title="Military Part Number" arrow placement='left'>
         <Typography variant="partnum">
           D38999/

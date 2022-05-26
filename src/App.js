@@ -24,7 +24,7 @@ function App() {
         '&:hover': {
           'font-weight': '575',
           'font-size': '2.5rem',
-        }
+        },
       }
     }
   });
@@ -41,7 +41,7 @@ function App() {
             <InsertImg />
           </Container>
         </Stack>
-        <Stack spacing={2} sx={{ width: '60%' }} alignItems='center'>
+        <Stack sx={{ width: '60%' }} alignItems='center'>
           <ThemeProvider theme={partNumTheme}>
             <MilPartNum />
             <CommercialPartNum />
