@@ -41,8 +41,8 @@ export default function CommercialPartNum(props) {
     }
     
     return (
-      <Tooltip title="Shell Style" arrow>
-        <Typography variant="h4" component="div" align='center' display='inline'>
+      <Tooltip title="Shell Style" arrow placement='left'>
+        <Typography variant="partnum">
           {output}
         </Typography>
       </Tooltip>
@@ -75,7 +75,7 @@ export default function CommercialPartNum(props) {
   
     return (
       <Tooltip title="Service Class" arrow>
-        <Typography variant="h4" component="div" align='center' display='inline'>
+        <Typography variant="partnum">
           {output}
         </Typography>
       </Tooltip>
@@ -86,29 +86,29 @@ export default function CommercialPartNum(props) {
     <Box mt={2} hidden={!visible}>
       {formatShellStyle(shellStyle)}
       {formatShellFinish(shellFinish)}
-      <Typography variant="h4" component="div" align='center' display='inline'>
+      <Typography variant="partnum" >
         -
       </Typography>
       <Tooltip title="Shell Size" arrow>
-        <Typography variant="h4" component="div" align='center' display='inline'>
+        <Typography variant="partnum">
           {String(shellSize)}
         </Typography>
       </Tooltip>
-      <Typography variant="h4" component="div" align='center' display='inline'>
+      <Typography variant="partnum">
         -
       </Typography>
       <Tooltip title="Insert Arrangement" arrow>
-        <Typography variant="h4" component="div" align='center' display='inline'>
+        <Typography variant="partnum">
           {String(insertArrangement)}
         </Typography>
       </Tooltip>
-      <Tooltip title="Contact Type" arrow>
-        <Typography variant="h4" component="div" align='center' display='inline'>
+      <Tooltip title="Contact Type" arrow placement={(keyArrangement === 'n') ? 'right' : 'bottom'}>
+        <Typography variant="partnum">
           {gender.toUpperCase()}
         </Typography>
       </Tooltip>
-      <Tooltip title="Key Arrangement" arrow>
-        <Typography variant="h4" component="div" align='center' display='inline'>
+      <Tooltip title="Key Arrangement" arrow placement='right'>
+        <Typography variant="partnum">
           {(keyArrangement !== 'n') ? keyArrangement.toUpperCase() : ''}
         </Typography>
       </Tooltip>
