@@ -83,7 +83,7 @@ export default function CommercialPartNum(props) {
   };
 
   return (
-    <Box hidden={!visible} minHeight={50} display='flex' alignItems='center'>
+    <Box minHeight={50} display={visible ? 'flex' : 'none'} alignItems='center'>
       {formatShellStyle(shellStyle)}
       {formatShellFinish(shellFinish)}
       <Typography variant="partnum" >
