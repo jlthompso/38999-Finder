@@ -77,6 +77,7 @@ export default function ConnectorTable() {
       abortSearch = true;
       await new Promise(resolve => setTimeout(resolve, 100));
     }
+    setProgress(0);
     searching = true;
 
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
