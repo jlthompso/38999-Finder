@@ -13,6 +13,8 @@ import {
 } from './connectorSlice';
 import { getPartNums } from '../app/partnums';
 import * as dk from '../app/digikey';
+import LinearProgress from '@mui/material/LinearProgress';
+import Box from '@mui/material/Box';
 
 const columns = [
   { field: 'partNum', headerName: 'Part Number', width: 200 },
@@ -43,9 +45,12 @@ export default function ConnectorTable() {
   const [rows, setRows] = useState([]);
   const [accessToken, setAccessToken] = useState();
   const [authCode, setAuthCode] = useState();
+  const [progress, setProgress] = useState(0);
+
 
   useEffect(() => {
     setRows([]);
+    setProgress(0);
     if (accessToken) searchDigikey();
   }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender, accessToken]);
 
@@ -87,12 +92,18 @@ export default function ConnectorTable() {
       response.forEach(row => {
         setRows((rows) => [...rows, row]);
       });
+
+      setProgress((oldProgress) => oldProgress + 100 / partNums.length);
     }
+    setProgress(100);
     searching = false;
   };
 
   return (
     <div style={{ height: 400, width: '100%' }}>
+      <Box m={2}>
+        <LinearProgress variant="determinate" value={progress} />
+      </Box>
       <DataGrid
         initialState={{
           sorting: {
