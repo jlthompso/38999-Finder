@@ -6,9 +6,10 @@ import SearchForm from './components/SearchForm';
 import MilPartNum from './components/MilPartNum';
 import Stack from '@mui/material/Stack';
 import CommercialPartNum from './components/CommercialPartNum';
-import InsertImg from './components/InsertImg';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { selectShellSize, selectInsertArrangement } from './components/connectorSlice';
+import { useSelector } from 'react-redux';
 
 function App() {
   const partNumTheme = createTheme({
@@ -29,6 +30,9 @@ function App() {
     }
   });
 
+  const shellSize = useSelector(selectShellSize);
+  const insertArrangement = useSelector(selectInsertArrangement);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -38,7 +42,7 @@ function App() {
         <Stack spacing={2} sx={{ width: '20%' }}>
           <SearchForm />
           <Container style={{ textAlign: "center" }}>
-            <InsertImg />
+            <img src={`/img/${shellSize}-${insertArrangement}.jpg`} alt="Front Face of Pin Insert" width="60%" />
           </Container>
         </Stack>
         <Stack sx={{ width: '60%' }} alignItems='center'>
