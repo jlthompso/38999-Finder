@@ -1,4 +1,4 @@
-export default async function search(partNum) {
+export async function search(partNum) {
   const results = [];
 
   const version = "v1";

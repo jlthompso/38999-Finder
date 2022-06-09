@@ -15,6 +15,7 @@ import { getPartNums } from '../app/partnums';
 import * as dk from '../app/digikey';
 import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
+import * as mouser from '../app/mouser';
 
 const columns = [
   { field: 'partNum', headerName: 'Part Number', width: 200 },
@@ -25,7 +26,7 @@ const columns = [
     field: 'vendor',
     headerName: 'Distributor',
     width: 200,
-    renderCell: (params) => (<a href={params.row.link} target='_blank'>{params.row.vendor}</a>)
+    renderCell: (params) => (<a href={params.row.link} target='_blank' rel="noreferrer">{params.row.vendor}</a>)
   },
 ];
 
@@ -51,7 +52,7 @@ export default function ConnectorTable() {
   useEffect(() => {
     setRows([]);
     setProgress(0);
-    if (accessToken) searchDigikey();
+    if (accessToken) search();
   }, [militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender, accessToken]);
 
   useEffect(() => {
@@ -72,7 +73,7 @@ export default function ConnectorTable() {
     if (authCode) getToken(authCode);
   }, [authCode]);
 
-  const searchDigikey = async () => {
+  const search = async () => {
     while (searching) {
       abortSearch = true;
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -82,19 +83,31 @@ export default function ConnectorTable() {
 
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
     for (const partNum of partNums) {
-      const response = await dk.search(accessToken, partNum);
+      for (let i = 0; i < 2; i++) {
+        let response;
+        switch (i) {
+          case 0:
+            response = await dk.search(accessToken, partNum);
+            break;
+          case 1:
+            response = await mouser.search(partNum);
+            break;
+          default:
+            break;
+        }
 
-      if (abortSearch) {
-        setRows([]);
-        abortSearch = false;
-        break;
+        if (abortSearch) {
+          setRows([]);
+          abortSearch = false;
+          break;
+        }
+  
+        response.forEach(row => {
+          setRows((rows) => [...rows, row]);
+        });
+  
+        setProgress((oldProgress) => oldProgress + 100 / (2 * partNums.length));
       }
-
-      response.forEach(row => {
-        setRows((rows) => [...rows, row]);
-      });
-
-      setProgress((oldProgress) => oldProgress + 100 / partNums.length);
     }
     setProgress(100);
     searching = false;

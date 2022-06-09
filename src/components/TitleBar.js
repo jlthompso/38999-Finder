@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -45,8 +45,8 @@ export default function TitleBar() {
                 About 38999finder.com
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                This website was created by <a href='https://github.com/jlthompso' target='_blank'>Joe Thompson</a>.
-                The source code is available on <a href='https://github.com/jlthompso/38999-Finder' target='_blank'>Github</a>.
+                This website was created by <a href='https://github.com/jlthompso' target='_blank' rel="noreferrer">Joe Thompson</a>.
+                The source code is available on <a href='https://github.com/jlthompso/38999-Finder' target='_blank' rel="noreferrer">Github</a>.
                 <br />
                 <br />
                 <a href="mailto:38999finder@gmail.com">Contact Me</a>
