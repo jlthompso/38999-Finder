@@ -84,7 +84,7 @@ export default function ConnectorTable() {
 
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
     for (const partNum of partNums) {
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 3; i++) {
         let response;
         switch (i) {
           case 0:
