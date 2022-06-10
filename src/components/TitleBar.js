@@ -29,7 +29,7 @@ export default function TitleBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-            MIL-DTL-38999 Series III Connectory Inventory Search
+            MIL-DTL-38999 Series III Connector Inventory Search
           </Typography>
           <IconButton aria-label="delete">
             <InfoIcon fontSize='large' sx={{ color: 'white' }} onClick={handleOpen} />
