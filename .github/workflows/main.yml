@@ -36,6 +36,7 @@ jobs:
           REACT_APP_DK_CLIENT_SECRET: ${{ secrets.REACT_APP_DK_CLIENT_SECRET }}
           REACT_APP_OAUTH_REDIRECT: ${{ secrets.REACT_APP_OAUTH_REDIRECT }}
           REACT_APP_MOUSER_API_KEY: ${{ secrets.REACT_APP_MOUSER_API_KEY }}
+          REACT_APP_NEWARK_API_KEY: ${{ secrets.REACT_APP_NEWARK_API_KEY }}
           
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3

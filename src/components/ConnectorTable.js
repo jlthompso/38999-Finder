@@ -16,6 +16,7 @@ import * as dk from '../app/digikey';
 import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
 import * as mouser from '../app/mouser';
+import * as newark from '../app/newark';
 
 const columns = [
   { field: 'partNum', headerName: 'Part Number', width: 200 },
@@ -83,7 +84,7 @@ export default function ConnectorTable() {
 
     const partNums = getPartNums({militaryType, commercialType, shellStyle, shellSize, insertArrangement, keyArrangement, shellFinish, gender});
     for (const partNum of partNums) {
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 3; i++) {
         let response;
         switch (i) {
           case 0:
@@ -91,6 +92,9 @@ export default function ConnectorTable() {
             break;
           case 1:
             response = await mouser.search(partNum);
+            break;
+          case 2:
+            response = await newark.search(partNum);
             break;
           default:
             break;
