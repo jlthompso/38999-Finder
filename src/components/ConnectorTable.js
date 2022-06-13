@@ -110,7 +110,7 @@ export default function ConnectorTable() {
           setRows((rows) => [...rows, row]);
         });
   
-        setProgress((oldProgress) => oldProgress + 100 / (2 * partNums.length));
+        setProgress((oldProgress) => oldProgress + 100 / (3 * partNums.length));
       }
     }
     setProgress(100);
